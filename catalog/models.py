@@ -19,7 +19,7 @@ class Genre(models.Model):
 class Language(models.Model):
     """Model representing a Language (e.g. English, French, Japanese, etc.)"""
     name = models.CharField(
-        max_length=200, help_text="Enter the book's natural language (e.eg. English, French, Japanese, etc.)")
+        max_length=200, help_text="Enter the book's natural language (e.g. English, French, Japanese, etc.)")
 
     def __str__(self) -> str:
         """String for representing the Model object (in Admin site etc.)"""
@@ -34,7 +34,7 @@ class Book(models.Model):
     # Author is a string rather than an object because it hasn't been declared yet in the file
     author = models.ForeignKey("Author", on_delete=models.SET_NULL, null=True)
 
-    summary = models.TimeField(
+    summary = models.TextField(
         max_length=1000, help_text="Enter a brief description of the book")
     isbn = models.CharField("ISBN", max_length=13, unique=True,
                             help_text="13 Character <a href='https://www.isbn-international.org/content/what-isbn'>ISBN number</a>")
@@ -64,7 +64,8 @@ class BookInstance(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="Unique ID for this particular book across whole library")
     book = models.ForeignKey("book", on_delete=models.RESTRICT, null=True)
-    imprint = models.CharField(max_length=200)
+    imprint = models.CharField(max_length=400)
+    publisher = models.CharField(max_length=200, null=True)
     due_back = models.DateTimeField(null=True, blank=True)
 
     LOAN_STATUS = (
