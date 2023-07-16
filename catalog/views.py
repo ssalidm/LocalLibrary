@@ -3,11 +3,14 @@ from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.views import generic
 from . models import Book, Author, BookInstance, Genre
+from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 # @login_required
+
+
 def index(request):
     """View function for home page of site."""
 
@@ -69,5 +72,31 @@ class AuthorListView(generic.ListView):
     model = Author
     paginate_by = 10
 
+
 class AuthorDetailView(generic.DetailView):
     model = Author
+
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    """Generic class-based view listing books on loan to current user."""
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return (
+            BookInstance.objects.filter(borrower=self.request.user).filter(
+                status__exact='o').order_by('due_back')
+        )
+        
+class LoanedBooksListView(LoginRequiredMixin, generic.ListView):
+    """Generic class-based view listing all books loaned out from the library."""  
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_all.html'  
+    paginate_by = 10
+    
+    def get_queryset(self):
+        return (
+            BookInstance.objects.all().filter(
+                status__exact='o').order_by('due_back')
+        )
