@@ -25,6 +25,7 @@
                             {{ bookinst.borrower.username }}
                         {% endif %}                    
                     {% if perms.catalog.can_mark_returned %}
+                    - <a href="{% url 'renew-book-librarian' bookinst.id %}">Renew</a>
                     <!-- We can mark a BookInstance as returned. -->
                     <!-- Perhaps add code to link to a "book return" view here. -->
                     {% endif %}

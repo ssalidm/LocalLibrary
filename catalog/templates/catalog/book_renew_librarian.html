@@ -1,0 +1,39 @@
+{% extends "base_generic.html" %}
+
+{% block title %}
+    <title>Local Library - Renew Book</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Renew: {{ book_instance.title }}</h1>
+    <p>Borrower: {{ book_instance.borrower }}</p>
+    <p>{% if book_instance.is_overdue %} class="text-danger"{% endif %}>
+        Due date: {{ book_instance.due_back }}
+    </p>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            <!-- <tr>
+                <th><label for="id_renewal_date">Renewal date:</label></th>
+                <td>
+                    <ul class="errorlist">
+                        <li>Invalid date - renewal in past</li>
+                    </ul>
+                    <input 
+                        type="text"
+                        id="id_renewal_date"
+                        name="renewal_date"
+                        value="2023-07-30"
+                        required />
+                    <br />
+                    <span class="helptext">
+                        Enter date between now and 4 weeks (default 3 weeks).
+                    </span>
+                </td>
+            </tr> -->
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
